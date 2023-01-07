@@ -39,6 +39,33 @@ const registerSocketServer = (server) => {
             serverStore.removeConnectedUser(socket.id);
             io.emit("connected_users", serverStore.getConnectedUsers());
         });
+
+
+        // webrtc----------------
+
+        socket.on("offer", ({ from, to, offer }) => {
+            // console.log({ from, to });
+
+            console.log(typeof (offer));
+
+            io.to(to).emit("offer", { from, to, offer });
+        });
+
+
+        socket.on("answer", ({ from, to, answer }) => {
+            // console.log({ from, to });
+            console.log(typeof (answer));
+
+            io.to(to).emit("answer", { from, to, answer });
+        });
+
+
+        socket.on("candidate", ({ from, to, candidate }) => {
+            // console.log({ from, to });
+
+            io.to(to).emit("candidate", { from, to, candidate });
+        });
+
     });
 
 };

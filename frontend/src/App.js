@@ -43,7 +43,7 @@ function App() {
 
 
 const GuestRoute = ({ children }) => {
-  const isAuth = JSON.parse(localStorage.getItem("user")) || false;
+  const isAuth = JSON.parse(sessionStorage.getItem("user")) || false;
   if (isAuth) {
     return (
       <Navigate to="/" />
@@ -56,7 +56,7 @@ const GuestRoute = ({ children }) => {
 }
 
 const ProtectedRoute = ({ children }) => {
-  const isAuth = JSON.parse(localStorage.getItem("user")) || false;
+  const isAuth = JSON.parse(sessionStorage.getItem("user")) || false;
   if (isAuth) {
     return (
       children

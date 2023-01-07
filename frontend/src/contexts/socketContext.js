@@ -1,16 +1,14 @@
-import React, { createContext } from "react";
+import React, { createContext, useMemo } from "react";
 import { io } from "socket.io-client";
 
 
 const SocketContext = createContext();
 
-const token = localStorage.getItem("token") || null;
-
-console.log(token);
-
 const ContextProvider = ({ children }) => {
-    // const socket = io("http://localhost:5000", { auth: { token } });
-    const socket = io("http://localhost:5000");
+
+    const socket = useMemo(() => {
+        return io("http://localhost:5000");
+    }, []);
 
     return (
         <SocketContext.Provider value={socket}>

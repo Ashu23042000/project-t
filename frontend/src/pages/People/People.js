@@ -1,97 +1,110 @@
-import { useContext, useEffect, useState } from 'react';
-import { useNavigate } from "react-router-dom";
+import { useContext, useEffect, useState, useCallback, useMemo } from 'react';
 import styles from "./People.module.css";
 import Navbar from "../../components/Navbar/Navbar";
 import swal from "sweetalert";
 import { SocketContext } from "../../contexts/socketContext";
-
-
-
-
-
-
-
-
-
-
+import Call from '../Call/Call';
 
 const People = () => {
 
-
-    const navigate = useNavigate();
     const [users, setUsers] = useState();
+    const [startCall, setStartCall] = useState(false)
     const [myId, setMyId] = useState();
-    const user = JSON.parse(localStorage.getItem("user"));
+    const [from, setFrom] = useState();
+    const [init, setInit] = useState(true);
 
+    const user = useMemo(() => {
+        return JSON.parse(sessionStorage.getItem("user"));
+    }, []);
 
     const socket = useContext(SocketContext);
-    useEffect(() => {
 
-        socket.on("connect", () => {
-            console.log(`Socket Id ${socket.id} connected...`);
-            setMyId(socket.id);
-            socket.emit("new_user", user);
+    const handleCallRequest = useCallback(async ({ from, to, name }) => {
+        const ans = await swal(`${name} wants to talk with you.`, {
+            buttons: ["Reject", true],
         });
 
-        socket.on("connected_users", (data) => {
-            setUsers(data);
-        });
+        socket.emit("call_reply", { from: to, to: from, ans });
+        if (ans) {
+            setInit(false);
+            setFrom(from);
+            setStartCall(true);
+        }
+    }, [socket]);
 
-        socket.on("call_reply", ({ from, to, ans }) => {
-            if (ans) {
-                navigate(`/call/${to}/${from}/true`);
-            } else {
-                swal("Rejected", {
-                    buttons: "Ok",
-                });
-            }
-        });
+    const handleConnection = useCallback(() => {
+        console.log(`Socket Id ${socket.id} connected...`);
+        setMyId(socket.id);
+        socket.emit("new_user", user);
+    }, [socket, user]);
 
-        socket.on("call_request", async ({ from, to, name }) => {
+    const handleConnectedUsers = useCallback((data) => {
+        setUsers(data);
+    }, []);
 
-            const ans = await swal(`${name} wants to talk with you.`, {
-                buttons: ["Reject", true],
+    const handleCallReply = useCallback(({ from, to, ans }) => {
+        if (ans) {
+            setFrom(from);
+            setStartCall(true)
+        } else {
+            swal("Rejected", {
+                buttons: "Ok",
             });
+        }
+    }, []);
 
-            socket.emit("call_reply", { from: to, to: from, ans });
-            if (ans) {
-                navigate(`/call/${to}/${from}/false`);
-            }
+    useEffect(() => {
+        socket.on("connect", handleConnection);
+        socket.on("connected_users", handleConnectedUsers);
+        socket.on("call_reply", handleCallReply);
+        socket.on("call_request", handleCallRequest);
+
+        return (() => {
+            socket.off("connect", handleConnection);
+            socket.off("connected_users", handleConnectedUsers);
+            socket.off("call_reply", handleCallReply);
+            socket.off("call_request", handleCallRequest);
         });
 
-    });
+    }, [handleCallReply, handleCallRequest, handleConnectedUsers, handleConnection, socket, user]);
 
 
-    const makeCall = (id, name) => {
+
+    const makeCall = useCallback((id, name) => {
         socket.emit("call_request", { from: myId, to: id, name });
-    };
+    }, [myId, socket]);
 
 
     return (
         <>
             <Navbar menus={[]} />
-            <div className={styles.users_grid}>
-                {
-                    users && users.map((value) => {
-                        return (value[1].id !== user.id ?
-                            < div className={styles.users} key={value[0]}>
-                                <h2>{value[1].name}</h2>
-                                <div>
-                                    <span>
-                                        {value[1].profession}
-                                    </span>
-                                    <span>
-                                        {value[1].level}
-                                    </span>
+            {!startCall ?
+                <div className={styles.users_grid}>
+                    {
+                        users && users.map((value) => {
+                            return (value[1].id !== user.id ?
+                                // return (
+
+                                < div className={styles.users} key={value[0]}>
+                                    <h2>{value[1].name}</h2>
+                                    <div>
+                                        <span>
+                                            {value[1].profession}
+                                        </span>
+                                        <span>
+                                            {value[1].level}
+                                        </span>
+                                    </div>
+                                    <button className={styles.callBtn} onClick={() => makeCall(value[0], value[1].name)}>
+                                        <span>Start Conversation</span>
+                                    </button>
                                 </div>
-                                <button className={styles.callBtn} onClick={() => makeCall(value[0], value[1].name)}>
-                                    <span>Start Conversation</span>
-                                </button>
-                            </div>
-                            : null);
-                    })
-                }
-            </div>
+                                : null);
+                            // )
+                        })
+                    }
+                </div> : <Call otherId={from} myId={myId} init={init} />
+            }
         </>
     )
 };

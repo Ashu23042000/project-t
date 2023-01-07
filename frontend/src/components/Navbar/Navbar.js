@@ -12,11 +12,11 @@ const Navbar = (props) => {
         settoggle(!toggle);
     }
 
-    const user = JSON.parse(localStorage.getItem("user")) || false;
+    const user = JSON.parse(sessionStorage.getItem("user")) || false;
 
     const logoutFun = async () => {
-        localStorage.removeItem("user");
-        localStorage.removeItem("token");
+        sessionStorage.removeItem("user");
+        sessionStorage.removeItem("token");
         navigate("/login");
     }
 
