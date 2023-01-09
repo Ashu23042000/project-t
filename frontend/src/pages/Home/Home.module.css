@@ -8,8 +8,8 @@
 .backImg {
     height: 85vh;
     background-size: cover;
-    width: 50%;
-    margin-left: 4rem;
+    width: 40%;
+    margin-left: 5rem;
     box-sizing: border-box;
     padding-left: 0.5rem;
 }
@@ -21,7 +21,7 @@
 }
 
 .sideContent {
-    width: 40%;
+    width: 50%;
     box-sizing: border-box;
     padding-top: 140px;
 }
@@ -64,12 +64,12 @@
 
     .main {
         display: block;
-        height: 90vh;
+        height: 75vh;
     }
 
     .backImg {
         width: 100vw;
-        height: 50%;
+        height: 60%;
         margin-left: 0;
     }
 
@@ -89,7 +89,13 @@
 
     .sideContent h1 {
         margin-bottom: 2rem;
-        font-weight: 100;
+        font-weight: 300;
         font-size: 35px;
+    }
+
+    .sideContent p {
+        font-weight: 300;
+        font-size: 22x;
+        padding-right: 2rem;
     }
 }

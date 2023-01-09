@@ -4,19 +4,33 @@
 }
 
 .stream_section {
-    width: 100%;
+    /* width: 100%;
     display: flex;
-    justify-content: space-between;
+    justify-content: space-between; */
+
+
+    width: 100%;
+    min-height: 300px;
+    background-color: rgb(255, 136, 0);
+    display: flex;
+    justify-content: space-around;
+    border-radius: 5px;
 }
 
 .myStream video {
-    height: 70%;
-    width: 100%;
+    min-width: 320px;
+    max-width: 380px;
+    min-height: 300px;
+    max-height: 350px;
+    margin: auto;
 }
 
 .otherStream video {
-    height: 70%;
-    width: 100%;
+    min-width: 320px;
+    max-width: 380px;
+    min-height: 300px;
+    max-height: 350px;
+    margin: auto;
 }
 
 .menus {
@@ -24,6 +38,13 @@
     display: flex;
     justify-content: center;
     width: 100%;
+}
+
+.menus span {
+    width: 180px;
+    padding: 0.5rem;
+    border-radius: 5px;
+    background: rgb(255, 136, 0);
 }
 
 .menus i {

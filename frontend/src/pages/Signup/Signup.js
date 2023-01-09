@@ -1,14 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import swal from 'sweetalert';
 import Navbar from "../../components/Navbar/Navbar";
 import styles from "./Signup.module.css";
 import * as api from "../../api";
 
-
+const menu = [{ title: "Home", link: "" }, { title: "Login", link: "login" }];
 const Signup = () => {
-
-
 
     const navigate = useNavigate();
 
@@ -20,7 +18,7 @@ const Signup = () => {
     const [confirmPassword, setConfirmPassword] = useState("");
 
 
-    async function submitForm(e) {
+    const submitForm = useCallback(async (e) => {
         e.preventDefault();
 
         const userDetails = {
@@ -40,12 +38,12 @@ const Signup = () => {
         } catch (error) {
             console.log(error);
         }
-    }
+    }, [confirmPassword, email, level, name, navigate, password, profession]);
 
 
     return (
         <>
-            <Navbar menus={[{ title: "Home", link: "" }, { title: "Login", link: "login" }]} />
+            <Navbar menus={menu} />
             <div className={styles.form}>
                 <form>
                     <i className="fas fa-user-plus"></i>
@@ -56,9 +54,9 @@ const Signup = () => {
 
                     <select name="level" className={styles.selectBox} required onChange={(e) => setLevel(e.target.value)}>
                         <option value="">Select Level</option>
-                        <option value="Low">Low</option>
+                        <option value="Begineer">Begineer</option>
                         <option value="Intermediate">Intermediate</option>
-                        <option value="Advanced">Advanced</option>
+                        <option value="Expert">Expert</option>
                     </select>
 
                     <select name="profession" className={styles.selectBox} required onChange={(e) => setProfession(e.target.value)}>

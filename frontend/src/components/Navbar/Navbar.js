@@ -1,24 +1,31 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, memo, useCallback, useMemo } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import styles from "./Navbar.module.css";
 
 const Navbar = (props) => {
 
+    useEffect(() => {
+        console.log("Navbar")
+    }, []);
+
     const navigate = useNavigate();
+    console.log("Navbar")
 
     const [toggle, settoggle] = useState(false);
 
-    const showMenu = () => {
+    const showMenu = useCallback(() => {
         settoggle(!toggle);
-    }
+    }, [toggle]);
 
-    const user = JSON.parse(sessionStorage.getItem("user")) || false;
+    const user = useMemo(() => {
+        return JSON.parse(sessionStorage.getItem("user")) || false;
+    }, []);
 
-    const logoutFun = async () => {
+    const logoutFun = useCallback(async () => {
         sessionStorage.removeItem("user");
         sessionStorage.removeItem("token");
         navigate("/login");
-    }
+    }, [navigate]);
 
     return (
         <>
@@ -54,4 +61,4 @@ const Navbar = (props) => {
 
 
 
-export default Navbar;
+export default memo(Navbar);

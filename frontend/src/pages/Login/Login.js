@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import swal from 'sweetalert';
 import Navbar from "../../components/Navbar/Navbar";
 import styles from "./Login.module.css";
 import * as api from "../../api";
 
+const menu = [{ title: "Home", link: "" }, { title: "Signup", link: "signup" }];
 
 const Login = () => {
 
@@ -13,8 +14,7 @@ const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
-
-    async function submitForm(e) {
+    const submitForm = useCallback(async (e) => {
         e.preventDefault();
         const userDetails = {
             email,
@@ -41,18 +41,18 @@ const Login = () => {
 
                     swal(response.data.message, "", "success");
                     navigate("/people");
-                    // window.location.reload();
                 }
             }
 
         } catch (error) {
             console.log(error);
         }
-    }
+    }, [email, navigate, password]);
+
 
     return (
         <>
-            <Navbar menus={[{ title: "Home", link: "" }, { title: "Signup", link: "signup" }]} />
+            <Navbar menus={menu} />
 
             <div className={styles.form}>
                 <form >

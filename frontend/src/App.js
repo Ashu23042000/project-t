@@ -63,7 +63,7 @@ const ProtectedRoute = ({ children }) => {
     )
   } else {
     return (
-      <Navigate to="/" />
+      <Navigate to="/login" />
     )
   }
 }

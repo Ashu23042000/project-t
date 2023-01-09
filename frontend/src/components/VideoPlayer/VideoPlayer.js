@@ -1,27 +1,58 @@
-import React from 'react'
+import React, { useState, useCallback } from 'react'
 import styles from "../VideoPlayer/VideoPlayer.module.css";
-const Videoplayer = (props) => {
+const Videoplayer = ({ stream, localStream, remoteStream, pc }) => {
+    const [isAudioMute, setIsAudioMute] = useState(true);
+    const [isVideoMute, setIsVideoMute] = useState(true);
+
+
+    const handleAudio = useCallback(() => {
+        stream.getAudioTracks().forEach((track) => {
+            track.enabled = !track.enabled;
+        });
+        setIsAudioMute(!isAudioMute);
+    }, [isAudioMute, stream]);
+
+    const handleVideo = useCallback(() => {
+        stream.getVideoTracks().forEach((track) => {
+            track.enabled = !track.enabled;
+        });
+        setIsVideoMute(!isVideoMute);
+    }, [isVideoMute, stream]);
+
+    const endCall = useCallback(() => {
+        stream.getTracks().forEach((track) => {
+            track.stop();
+        });
+        pc.close();
+        window.location.reload();
+
+    }, [pc, stream]);
+
     return (
         <div className={styles.section1}>
             <div className={styles.stream_section}>
                 <div className={styles.myStream}>
-                    <video ref={props.localStream} autoPlay muted />
+                    <video ref={localStream} autoPlay muted />
                 </div>
                 <div className={styles.otherStream}>
-                    <video ref={props.remoteStream} autoPlay muted />
+                    <video ref={remoteStream} autoPlay muted />
                 </div>
             </div>
             <div className={styles.menus}>
-                <i className="fas fa-microphone mikeon" />
+                <span>
+                    {isAudioMute ?
+                        <i className="fas fa-microphone mikeon" onClick={handleAudio} /> :
+                        <i className="fa fa-microphone-slash mikeoff " onClick={handleAudio} />
+                    }
+                    {isVideoMute ?
+                        <i className="fas fa-video videoon" onClick={handleVideo} /> :
+                        <i className="fas fa-video-slash videooff" onClick={handleVideo} />
+                    }
+                    <i className="fas fa-phone-slash" onClick={endCall}></i>
 
-                <i className="fa fa-microphone-slash mikeoff " />
-
-                <i className="fas fa-video videoon" />
-                <i className="fas fa-video-slash videooff" />
+                </span>
             </div>
-            <button className={styles.endCall}>End Call</button>
-            <button className={styles.report_user}>Report</button>
-        </div>
+        </div >
     )
 }
 

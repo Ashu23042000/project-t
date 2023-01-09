@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useContext, useRef, useCallback, useMemo } from 'react';
 import styles from "../Call/Call.module.css";
 import Videoplayer from "../../components/VideoPlayer/VideoPlayer";
 import { SocketContext } from "../../contexts/socketContext";
@@ -7,31 +7,32 @@ import SideBar from '../../components/SideBar/SideBar';
 const Call = ({ myId, otherId, init }) => {
     const socket = useContext(SocketContext);
 
+
+    const [local_stream, setLocal_stream] = useState();
     const localStream = useRef();
     const remoteStream = useRef();
-    const _pc = useRef(new RTCPeerConnection());
-
-    console.log("outside call useEffect");
-
+    const _pc = useMemo(() => {
+        return new RTCPeerConnection();
+    }, []);
 
     const createAndSendAnswer = useCallback(async ({ from, to, offer }) => {
-        _pc.current.setRemoteDescription(new RTCSessionDescription(offer));
+        _pc.setRemoteDescription(new RTCSessionDescription(offer));
 
-        const answer = await _pc.current.createAnswer();
-        _pc.current.setLocalDescription(new RTCSessionDescription(answer));
+        const answer = await _pc.createAnswer();
+        _pc.setLocalDescription(new RTCSessionDescription(answer));
 
         socket.emit("answer", { from: myId, to: otherId, answer });
-    }, [myId, otherId, socket]);
+    }, [_pc, myId, otherId, socket]);
 
     const createAndSendOffer = useCallback(async () => {
 
-        const offer = await _pc.current.createOffer({ offerToReceiveAudio: true, offerToReceiveVideo: true });
+        const offer = await _pc.createOffer({ offerToReceiveAudio: true, offerToReceiveVideo: true });
 
         socket.emit("offer", { from: myId, to: otherId, offer });
 
-        _pc.current.setLocalDescription(new RTCSessionDescription(offer));
+        _pc.setLocalDescription(new RTCSessionDescription(offer));
 
-    }, [myId, otherId, socket]);
+    }, [_pc, myId, otherId, socket]);
 
     const handleOffer = useCallback((data) => {
         navigator.mediaDevices.getUserMedia({
@@ -41,24 +42,24 @@ const Call = ({ myId, otherId, init }) => {
             }
         }).then(async (stream) => {
             localStream.current.srcObject = stream;
-
+            setLocal_stream(stream);
             stream.getTracks().forEach((track) => {
-                _pc.current.addTrack(track, stream);
+                _pc.addTrack(track, stream);
             });
             createAndSendAnswer(data);
 
         }).catch((err) => {
             console.log(err);
         });
-    }, [createAndSendAnswer]);
+    }, [_pc, createAndSendAnswer]);
 
     const handleAnswer = useCallback(async (data) => {
-        _pc.current.setRemoteDescription(new RTCSessionDescription(data.answer));
-    }, []);
+        _pc.setRemoteDescription(new RTCSessionDescription(data.answer));
+    }, [_pc]);
 
     const handleCandidate = useCallback((data) => {
-        _pc.current.addIceCandidate(new RTCIceCandidate(data.candidate));
-    }, []);
+        _pc.addIceCandidate(new RTCIceCandidate(data.candidate));
+    }, [_pc]);
 
     const handleStream = useCallback((e) => {
         if (e.streams) {
@@ -72,9 +73,12 @@ const Call = ({ myId, otherId, init }) => {
         }
     }, [myId, otherId, socket]);
 
+
+
+
+
     useEffect(() => {
-        console.log("In call useEffect");
-        const pc = _pc.current;
+        // const pc = _pc.current;
 
         if (init) {
             navigator.mediaDevices.getUserMedia({
@@ -83,10 +87,10 @@ const Call = ({ myId, otherId, init }) => {
                     height: { min: 576, ideal: 720, max: 1080 },
                 }
             }).then((stream) => {
+                setLocal_stream(stream);
                 localStream.current.srcObject = stream;
-
                 stream.getTracks().forEach((track) => {
-                    _pc.current.addTrack(track, stream);
+                    _pc.addTrack(track, stream);
                 });
 
                 createAndSendOffer()
@@ -95,16 +99,14 @@ const Call = ({ myId, otherId, init }) => {
             });
         }
 
-        pc.addEventListener("icecandidate", handleIceCandidate);
-        pc.addEventListener("track", handleStream);
-
+        _pc.addEventListener("icecandidate", handleIceCandidate);
+        _pc.addEventListener("track", handleStream);
         return (() => {
-            pc.removeEventListener("track", handleStream);
-            pc.removeEventListener("icecandidate", handleIceCandidate);
-
+            _pc.removeEventListener("track", handleStream);
+            _pc.removeEventListener("icecandidate", handleIceCandidate);
         });
 
-    }, [createAndSendOffer, handleIceCandidate, handleStream, init, myId, otherId, socket]);
+    }, [_pc, createAndSendOffer, handleIceCandidate, handleStream, init, myId, otherId, socket]);
 
 
 
@@ -126,7 +128,7 @@ const Call = ({ myId, otherId, init }) => {
 
     return (
         <div className={styles.main}>
-            <Videoplayer localStream={localStream} remoteStream={remoteStream} />
+            <Videoplayer stream={local_stream} localStream={localStream} remoteStream={remoteStream} pc={_pc} />
             <SideBar />
         </div>
     )
