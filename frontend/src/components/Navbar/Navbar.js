@@ -32,7 +32,8 @@ const Navbar = (props) => {
             <div className={styles.navbar}>
                 <div className={`container ${styles.navbar_wraper}`}>
                     <div className={styles.brand}>
-                        <h2><Link to="/">ASHAPP</Link></h2>
+                        <h2><Link to="/">talkrs</Link></h2>
+                        {/* <h2><Link to="/"><img src="./images/talkrs-logo.png" alt='Icon' /></Link></h2> */}
                     </div>
                     <div className={styles.navMenu}>
                         <ul>

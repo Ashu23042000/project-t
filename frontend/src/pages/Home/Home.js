@@ -1,10 +1,14 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { Link } from "react-router-dom";
 import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
 import styles from "./Home.module.css";
 
 const Home = () => {
+    useEffect(() => {
+        document.title = "talkrs";
+    }, []);
+
     const isAuth = useMemo(() => {
         return sessionStorage.getItem("user") || false;
     }, []);

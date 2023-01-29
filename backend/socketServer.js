@@ -61,10 +61,13 @@ const registerSocketServer = (server) => {
 
 
         socket.on("candidate", ({ from, to, candidate }) => {
-            // console.log({ from, to });
-
             io.to(to).emit("candidate", { from, to, candidate });
         });
+
+        socket.on("endCall", (to) => {
+            io.to(to).emit("endCall");
+        });
+
 
     });
 

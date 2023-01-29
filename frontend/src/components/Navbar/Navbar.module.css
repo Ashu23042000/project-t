@@ -2,9 +2,6 @@
     height: 50px;
     width: 100vw;
     background-color: rgb(255, 136, 0);
-
-    /* background-color: rgb(255, 69, 0); */
-
 }
 
 .navbar_wraper {
@@ -15,19 +12,14 @@
 .brand h2 {
     font-weight: 100;
     margin: 8px 0 10px 0;
+    font-family: 'Alfa Slab One', cursive;
 }
+
 
 .navMenu ul li {
     display: inline-block;
     margin: 15px 10px 10px 0;
 }
-
-/* .navMenu ul li a {
-    text-decoration: none;
-    color: black;
-} */
-
-
 
 
 .hamburger {

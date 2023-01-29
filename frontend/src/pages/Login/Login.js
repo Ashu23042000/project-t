@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import swal from 'sweetalert';
 import Navbar from "../../components/Navbar/Navbar";
@@ -9,19 +9,24 @@ const menu = [{ title: "Home", link: "" }, { title: "Signup", link: "signup" }];
 
 const Login = () => {
 
+    useEffect(() => {
+        document.title = "Login";
+    }, []);
+
     const navigate = useNavigate();
 
-    const [email, setEmail] = useState("");
+    const emailRef = useRef();
+    const passwordRef = useRef();
     const [password, setPassword] = useState("");
 
     const submitForm = useCallback(async (e) => {
         e.preventDefault();
         const userDetails = {
-            email,
-            password
+            email: emailRef.current.value,
+            password: passwordRef.current.value
         }
         try {
-            if (email !== "" && password !== "") {
+            if (userDetails.email !== "" && userDetails.password !== "") {
                 const response = await api.login(userDetails);
 
                 if (response.isError) {
@@ -47,7 +52,7 @@ const Login = () => {
         } catch (error) {
             console.log(error);
         }
-    }, [email, navigate, password]);
+    }, [navigate]);
 
 
     return (
@@ -58,10 +63,9 @@ const Login = () => {
                 <form >
                     <i className="fas fa-user-circle"></i>
 
-                    <input type="email" className={styles.user_input} placeholder="Email" name="email" required value={email} onChange={(e) => setEmail(e.target.value)} />
-
-                    <input type="password" className={styles.user_input} placeholder="Password" name="password"
-                        required value={password} onChange={(e) => setPassword(e.target.value)} />
+                    <input type="email" className={styles.user_input} placeholder="Email" name="email" required ref={emailRef} />
+                    <input type="password" className={styles.user_input} placeholder="Password" name="password" ref={passwordRef} onChange={(e) => { setPassword(e.target.value) }}
+                        required />
 
                     <div className={styles.option_1}>
                         <Link to="/forgot-password">Forgot Password</Link>

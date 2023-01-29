@@ -1,9 +1,30 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useContext, useEffect } from 'react'
 import styles from "../VideoPlayer/VideoPlayer.module.css";
-const Videoplayer = ({ stream, localStream, remoteStream, pc }) => {
+import { SocketContext } from "../../contexts/socketContext";
+import swal from "sweetalert";
+
+const Videoplayer = ({ otherSocketId, stream, localStream, remoteStream, pc }) => {
+
+    const socket = useContext(SocketContext);
+
     const [isAudioMute, setIsAudioMute] = useState(true);
     const [isVideoMute, setIsVideoMute] = useState(true);
 
+    const handleEndCall = useCallback(() => {
+        stream.getTracks().forEach((track) => {
+            track.stop();
+        });
+        pc.close();
+        window.location.reload();
+    }, [pc, stream]);
+
+    useEffect(() => {
+        socket.on("endCall", handleEndCall);
+
+        return (() => {
+            socket.off("endCall", handleEndCall);
+        })
+    }, [handleEndCall, socket]);
 
     const handleAudio = useCallback(() => {
         stream.getAudioTracks().forEach((track) => {
@@ -19,14 +40,20 @@ const Videoplayer = ({ stream, localStream, remoteStream, pc }) => {
         setIsVideoMute(!isVideoMute);
     }, [isVideoMute, stream]);
 
-    const endCall = useCallback(() => {
-        stream.getTracks().forEach((track) => {
-            track.stop();
-        });
-        pc.close();
-        window.location.reload();
+    const endCall = useCallback(async () => {
 
-    }, [pc, stream]);
+        const ans = await swal(`Do you want to end the call`, {
+            buttons: ["No", "Yes"],
+        });
+        if (ans === true) {
+            stream.getTracks().forEach((track) => {
+                track.stop();
+            });
+            pc.close();
+            socket.emit("endCall", otherSocketId);
+            window.location.reload();
+        }
+    }, [otherSocketId, pc, socket, stream]);
 
     return (
         <div className={styles.section1}>
@@ -49,7 +76,6 @@ const Videoplayer = ({ stream, localStream, remoteStream, pc }) => {
                         <i className="fas fa-video-slash videooff" onClick={handleVideo} />
                     }
                     <i className="fas fa-phone-slash" onClick={endCall}></i>
-
                 </span>
             </div>
         </div >

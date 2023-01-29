@@ -41,15 +41,18 @@
 }
 
 .menus span {
-    width: 180px;
+    width: 200px;
     padding: 0.5rem;
     border-radius: 5px;
     background: rgb(255, 136, 0);
 }
 
 .menus i {
-    margin: 0 10px;
+    width: 30px;
+    margin: 0 15px;
     font-size: 1.5rem;
+    cursor: pointer;
+    /* position: fixed; */
 }
 
 .cameraChange {

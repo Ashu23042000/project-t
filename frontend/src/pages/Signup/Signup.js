@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import swal from 'sweetalert';
 import Navbar from "../../components/Navbar/Navbar";
@@ -8,12 +8,17 @@ import * as api from "../../api";
 const menu = [{ title: "Home", link: "" }, { title: "Login", link: "login" }];
 const Signup = () => {
 
+    useEffect(() => {
+        document.title = "Signup";
+    }, []);
+
     const navigate = useNavigate();
 
-    const [name, setName] = useState(null);
-    const [email, setEmail] = useState("");
-    const [level, setLevel] = useState("");
-    const [profession, setProfession] = useState("");
+    const name = useRef();
+    const email = useRef();
+    const level = useRef();
+    const profession = useRef();
+
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
 
@@ -22,7 +27,12 @@ const Signup = () => {
         e.preventDefault();
 
         const userDetails = {
-            name, email, level, profession, password, confirmPassword
+            name: name.current.value,
+            email: email.current.value,
+            level: level.current.value,
+            profession: profession.current.value,
+            password,
+            confirmPassword
         }
 
         try {
@@ -48,18 +58,18 @@ const Signup = () => {
                 <form>
                     <i className="fas fa-user-plus"></i>
 
-                    <input type="text" className={styles.user_input} placeholder="Username" name="name" required onChange={(e) => setName(e.target.value)} />
+                    <input type="text" className={styles.user_input} placeholder="Username" name="name" required ref={name} />
 
-                    <input type="email" className={styles.user_input} placeholder="Email" name="email" required onChange={(e) => setEmail(e.target.value)} />
+                    <input type="email" className={styles.user_input} placeholder="Email" name="email" required ref={email} />
 
-                    <select name="level" className={styles.selectBox} required onChange={(e) => setLevel(e.target.value)}>
+                    <select name="level" className={styles.selectBox} required ref={level}>
                         <option value="">Select Level</option>
                         <option value="Begineer">Begineer</option>
                         <option value="Intermediate">Intermediate</option>
                         <option value="Expert">Expert</option>
                     </select>
 
-                    <select name="profession" className={styles.selectBox} required onChange={(e) => setProfession(e.target.value)}>
+                    <select name="profession" className={styles.selectBox} required ref={profession}>
                         <option value="">Select Profession</option>
                         <option value="Student">Student</option>
                         <option value="Employee">Employee</option>
@@ -73,7 +83,7 @@ const Signup = () => {
                         name="confirmPassword" required onChange={(e) => setConfirmPassword(e.target.value)} />
 
                     {
-                        password.length >= 6 && confirmPassword.length >= 6 ?
+                        password.length >= 6 && confirmPassword.length >= 6 && password === confirmPassword ?
                             <button type="submit" className={styles.btn} onClick={submitForm}>Signup</button> :
                             <button type="submit" className={` ${styles.disable}`} onClick={submitForm}
                                 disabled>Signup</button>

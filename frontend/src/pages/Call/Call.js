@@ -5,8 +5,11 @@ import { SocketContext } from "../../contexts/socketContext";
 import SideBar from '../../components/SideBar/SideBar';
 
 const Call = ({ myId, otherId, init }) => {
-    const socket = useContext(SocketContext);
+    useEffect(() => {
+        document.title = "Call";
+    }, []);
 
+    const socket = useContext(SocketContext);
 
     const [local_stream, setLocal_stream] = useState();
     const localStream = useRef();
@@ -73,10 +76,6 @@ const Call = ({ myId, otherId, init }) => {
         }
     }, [myId, otherId, socket]);
 
-
-
-
-
     useEffect(() => {
         // const pc = _pc.current;
 
@@ -128,7 +127,7 @@ const Call = ({ myId, otherId, init }) => {
 
     return (
         <div className={styles.main}>
-            <Videoplayer stream={local_stream} localStream={localStream} remoteStream={remoteStream} pc={_pc} />
+            <Videoplayer otherSocketId={otherId} stream={local_stream} localStream={localStream} remoteStream={remoteStream} pc={_pc} />
             <SideBar />
         </div>
     )

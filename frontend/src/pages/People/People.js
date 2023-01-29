@@ -7,6 +7,10 @@ import Call from '../Call/Call';
 
 const People = () => {
 
+    useEffect(() => {
+        document.title = "People";
+    }, []);
+
     const [users, setUsers] = useState();
     const [startCall, setStartCall] = useState(false)
     const [myId, setMyId] = useState();
@@ -21,7 +25,7 @@ const People = () => {
 
     const handleCallRequest = useCallback(async ({ from, to, name }) => {
         const ans = await swal(`${name} wants to talk with you.`, {
-            buttons: ["Reject", true],
+            buttons: ["Reject", "Accept"],
         });
 
         socket.emit("call_reply", { from: to, to: from, ans });
@@ -72,6 +76,9 @@ const People = () => {
 
     const makeCall = useCallback((id, name) => {
         socket.emit("call_request", { from: myId, to: id, name });
+        swal("Request Request Sent", {
+            buttons: "Ok",
+        });
     }, [myId, socket]);
 
 

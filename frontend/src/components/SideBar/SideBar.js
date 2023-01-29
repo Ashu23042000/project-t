@@ -6,6 +6,7 @@ const SideBar = () => {
         <div className={styles.section2} >
             <h2>Topics to discuss</h2>
             <p>Tell me about your family.</p>
+            <p>What is your educational background.</p>
             <p>Tell us about your hobbies.</p>
             <p>What kind of movies do you like?.</p>
             <p>Describe your job.</p>
@@ -17,7 +18,7 @@ const SideBar = () => {
             <p>What was your childhood like.</p>
             <p>Where do you like to travel?</p>
             <p>What is your favorite holiday?</p>
-            <p>What are your main goals for this year?.</p>
+            <p>What are your main goals for this year?</p>
             <p>Cats or dogs? Who do you prefer?</p>
             <p>What kind of vehicles do you like?</p>
             <p>What is your favorite country to live?</p>
