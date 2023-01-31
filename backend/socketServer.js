@@ -13,14 +13,7 @@ const registerSocketServer = (server) => {
         }
     });
 
-    // io.use((socket, next) => {
-    //     authMiddleware.verifySocketToken(socket, next);
-    // });
-
     io.on("connection", (socket) => {
-        console.log(`${socket.id} connected......`);
-
-
         socket.on("new_user", (data) => {
             serverStore.addNewConnectedUser(socket.id, data);
             io.emit("connected_users", serverStore.getConnectedUsers());
@@ -44,18 +37,11 @@ const registerSocketServer = (server) => {
         // webrtc----------------
 
         socket.on("offer", ({ from, to, offer }) => {
-            // console.log({ from, to });
-
-            console.log(typeof (offer));
-
             io.to(to).emit("offer", { from, to, offer });
         });
 
 
         socket.on("answer", ({ from, to, answer }) => {
-            // console.log({ from, to });
-            console.log(typeof (answer));
-
             io.to(to).emit("answer", { from, to, answer });
         });
 

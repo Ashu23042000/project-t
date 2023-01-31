@@ -48,7 +48,6 @@ class UserController {
         console.log(email, password);
         try {
             const user = await userService.findUser({ email });
-            console.log(user);
             if (user) {
 
                 const comparePass = await userService.comparePassword(password, user.password);
