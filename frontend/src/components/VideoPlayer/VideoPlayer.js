@@ -59,10 +59,10 @@ const Videoplayer = ({ otherSocketId, stream, localStream, remoteStream, pc }) =
         <div className={styles.section1}>
             <div className={styles.stream_section}>
                 <div className={styles.myStream}>
-                    <video ref={localStream} autoPlay muted />
+                    <video ref={localStream} autoPlay />
                 </div>
                 <div className={styles.otherStream}>
-                    <video ref={remoteStream} autoPlay muted />
+                    <video ref={remoteStream} autoPlay />
                 </div>
             </div>
             <div className={styles.menus}>

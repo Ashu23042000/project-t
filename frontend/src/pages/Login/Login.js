@@ -41,8 +41,8 @@ const Login = () => {
                         reportCount: response.data.user.reportCount
                     };
 
-                    sessionStorage.setItem("token", response.data.token);
-                    sessionStorage.setItem("user", JSON.stringify(user));
+
+                    localStorage.setItem("user", JSON.stringify(user));
 
                     swal(response.data.message, "", "success");
                     navigate("/people");

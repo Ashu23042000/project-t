@@ -18,7 +18,7 @@ const People = () => {
     const [init, setInit] = useState(true);
 
     const user = useMemo(() => {
-        return JSON.parse(sessionStorage.getItem("user"));
+        return JSON.parse(localStorage.getItem("user"));
     }, []);
 
     const socket = useContext(SocketContext);
@@ -37,7 +37,6 @@ const People = () => {
     }, [socket]);
 
     const handleConnection = useCallback(() => {
-        console.log(`Socket Id ${socket.id} connected...`);
         setMyId(socket.id);
         socket.emit("new_user", user);
     }, [socket, user]);
@@ -90,7 +89,7 @@ const People = () => {
                     {
                         users && users.map((value) => {
                             return (value[1].id !== user.id ?
-                                // return (
+                                //  return (
 
                                 < div className={styles.users} key={value[0]}>
                                     <h2>{value[1].name}</h2>
@@ -107,7 +106,7 @@ const People = () => {
                                     </button>
                                 </div>
                                 : null);
-                            // )
+                            //  )
                         })
                     }
                 </div> : <Call otherId={from} myId={myId} init={init} />

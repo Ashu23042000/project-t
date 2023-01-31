@@ -9,9 +9,10 @@
     justify-content: space-between;
 }
 
-.brand h2 {
+.brand h1 {
     font-weight: 100;
-    margin: 8px 0 10px 0;
+    font-size: 30px;
+    margin: 2px 0 8px 0;
     font-family: 'Alfa Slab One', cursive;
 }
 
@@ -67,5 +68,9 @@
 
     .hamburger i {
         font-size: 1.5rem;
+    }
+
+    .brand h1 {
+        font-size: 25px;
     }
 }

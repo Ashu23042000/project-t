@@ -21,6 +21,8 @@
     justify-content: space-between;
 }
 
+
+
 .users button {
     width: 100%;
     height: 22px;
@@ -39,6 +41,11 @@
         grid-template-columns: 1fr;
         column-gap: 10px;
         row-gap: 30px;
+    }
+
+    .users h2 {
+        font-size: 20px;
+        font-weight: 100;
     }
 
 }

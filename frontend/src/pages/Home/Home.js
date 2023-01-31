@@ -10,7 +10,7 @@ const Home = () => {
     }, []);
 
     const isAuth = useMemo(() => {
-        return sessionStorage.getItem("user") || false;
+        return localStorage.getItem("user") || false;
     }, []);
 
     const menu = useMemo(() => {

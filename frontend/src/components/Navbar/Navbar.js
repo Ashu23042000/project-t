@@ -1,15 +1,9 @@
-import React, { useState, useEffect, memo, useCallback, useMemo } from 'react';
+import React, { useState, memo, useCallback, useMemo } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import styles from "./Navbar.module.css";
 
 const Navbar = (props) => {
-
-    useEffect(() => {
-        console.log("Navbar")
-    }, []);
-
     const navigate = useNavigate();
-    console.log("Navbar")
 
     const [toggle, settoggle] = useState(false);
 
@@ -18,13 +12,13 @@ const Navbar = (props) => {
     }, [toggle]);
 
     const user = useMemo(() => {
-        return JSON.parse(sessionStorage.getItem("user")) || false;
+        return JSON.parse(localStorage.getItem("user")) || false;
     }, []);
 
     const logoutFun = useCallback(async () => {
-        sessionStorage.removeItem("user");
-        sessionStorage.removeItem("token");
+        localStorage.removeItem("user");
         navigate("/login");
+        window.location.reload();
     }, [navigate]);
 
     return (
@@ -32,8 +26,7 @@ const Navbar = (props) => {
             <div className={styles.navbar}>
                 <div className={`container ${styles.navbar_wraper}`}>
                     <div className={styles.brand}>
-                        <h2><Link to="/">talkrs</Link></h2>
-                        {/* <h2><Link to="/"><img src="./images/talkrs-logo.png" alt='Icon' /></Link></h2> */}
+                        <h1><Link to="/">talkrs</Link></h1>
                     </div>
                     <div className={styles.navMenu}>
                         <ul>
