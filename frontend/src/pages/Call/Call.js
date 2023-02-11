@@ -77,8 +77,6 @@ const Call = ({ myId, otherId, init }) => {
     }, [myId, otherId, socket]);
 
     useEffect(() => {
-        // const pc = _pc.current;
-
         if (init) {
             navigator.mediaDevices.getUserMedia({
                 audio: true, video: {

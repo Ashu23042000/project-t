@@ -44,8 +44,6 @@ class UserController {
     async login(req, res) {
 
         const { email, password } = req.body;
-
-        console.log(email, password);
         try {
             const user = await userService.findUser({ email });
             if (user) {

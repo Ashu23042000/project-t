@@ -67,9 +67,9 @@ const Login = () => {
                     <input type="password" className={styles.user_input} placeholder="Password" name="password" ref={passwordRef} onChange={(e) => { setPassword(e.target.value) }}
                         required />
 
-                    <div className={styles.option_1}>
+                    {/* <div className={styles.option_1}>
                         <Link to="/forgot-password">Forgot Password</Link>
-                    </div>
+                    </div> */}
 
                     {
                         password.length >= 6 ?

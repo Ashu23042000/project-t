@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import styles from "./Navbar.module.css";
 
 const Navbar = (props) => {
+
     const navigate = useNavigate();
 
     const [toggle, settoggle] = useState(false);
