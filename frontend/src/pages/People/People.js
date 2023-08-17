@@ -75,7 +75,7 @@ const People = () => {
 
     const makeCall = useCallback((id, name) => {
         socket.emit("call_request", { from: myId, to: id, name });
-        swal("Request Request Sent", {
+        swal("Call Request Sent", {
             buttons: "Ok",
         });
     }, [myId, socket]);

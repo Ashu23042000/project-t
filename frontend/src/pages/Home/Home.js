@@ -26,8 +26,9 @@ const Home = () => {
                 </div>
                 <div className={styles.sideContent}>
                     <h1>Improve Your English</h1>
-                    <p>Speak english fluently by doing practice of speaking english daily. Talk with a people through
-                        live video call.</p>
+                    {/* <p>Speak english fluently by doing practice of speaking english daily. Talk with a people through
+                        live video call.</p> */}
+                        <p>Achieve fluency in English by engaging in daily speaking practice. Enhance your language skills by regularly participating in live video calls with others.</p>
                     <Link to="/people"><button>Start</button></Link>
                 </div>
             </main>

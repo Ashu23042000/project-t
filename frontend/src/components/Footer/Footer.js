@@ -7,18 +7,18 @@ const Footer = () => {
         <>
             <footer>
                 <div className={styles.footer_block}>
-                    <Link to="#">
+                    <a href="https://www.facebook.com/people/Talkrs/61550274603516/" target="_blank" rel="noreferrer">
                         <i className="fab fa-facebook-square"></i>
-                    </Link>
-                    <Link to="#">
+                    </a>
+                    <a href="https://www.instagram.com/talkrs.online/" target="_blank" rel="noreferrer">
                         <i className="fab fa-instagram"></i>
-                    </Link>
-                    <Link to="#">
+                    </a>
+                    {/* <Link to="#">
                         <i className="fab fa-twitter-square"></i>
-                    </Link>
-                    <Link to="#">
+                    </Link> */}
+                    <a href="https://www.linkedin.com/company/talkrs-online" target="_blank" rel="noreferrer">
                         <i className="fab fa-linkedin"></i>
-                    </Link>
+                    </a>
                 </div>
             </footer>
         </>
