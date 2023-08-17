@@ -22,17 +22,17 @@ class AuthMiddleware {
     }
 
 
-    verifySocketToken(socket, next) {
-        const token = socket.handshake.auth?.token;
-        try {
-            const decoded = jwt.verify(token, JWT_TOKEN_SECRET);
-            socket.user = decoded;
-        } catch (error) {
-            const socketError = new Error("Not authorized. Invalid token");
-            return next(socketError)
-        }
-        next();
-    }
+    // verifySocketToken(socket, next) {
+    //     const token = socket.handshake.auth?.token;
+    //     try {
+    //         const decoded = jwt.verify(token, JWT_TOKEN_SECRET);
+    //         socket.user = decoded;
+    //     } catch (error) {
+    //         const socketError = new Error("Not authorized. Invalid token");
+    //         return next(socketError)
+    //     }
+    //     next();
+    // }
 }
 
 

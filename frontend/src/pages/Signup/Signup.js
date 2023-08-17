@@ -72,7 +72,7 @@ const Signup = () => {
                     <select name="profession" className={styles.selectBox} required ref={profession}>
                         <option value="">Select Profession</option>
                         <option value="Student">Student</option>
-                        <option value="Employee">Employee</option>
+                        <option value="Working professional">Working professional</option>
                         <option value="Other">Other</option>
                     </select>
 
